@@ -1,3 +1,9 @@
+**.pdf
+**.csv
+Img/
+Out/
+TFModel/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
