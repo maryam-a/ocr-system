@@ -21,6 +21,7 @@
 ##cv2.destroyAllWindows()
 import cv2
 import numpy as np
+from PIL import Image
 
 def overlaps(prev, curr):
     
@@ -39,8 +40,10 @@ def overlaps(prev, curr):
                   , max(h1+y1,h2+y2)-min(y1,y2)])
     else:
         return ("disjoint", curr)
- 
-img = cv2.imread('awsscreenshot2.png')
+
+img = cv2.imread('sample_screenshots/testscrnshot.png')
+img_cutversion=Image.open('sample_screenshots/testscrnshot.png')
+
 mser = cv2.MSER_create()
 
 #Resize the image so that MSER can work better
@@ -80,11 +83,19 @@ for r in range(1,len(rects)):
         #print("--disjoint", prev, this)
         summarized_rects.append(average)
 
-print (summarized_rects)
-        
+print ("summarized rects", summarized_rects)
+print("pillow image size", img_cutversion.size)
+
+cutimages=[]
 for r in summarized_rects:
     x,y,w,h = r
-    cv2.rectangle(vis,(x,y),(x+w,y+h),(0,255,0),2)
+    cv2.rectangle(vis,(x,y),(x+w,y+h),(0,255,0),2) #draws it
+
+    cutimages.append(img_cutversion.crop((x//2,y//2,(x+w)//2,(y+h)//2)))
+
+for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving
+    picture = cutimages[index]
+    picture.save('image' + str(index) +'.png')
 
  #   print([x,y,w,h])
  #   box = cv2.boxPoints(rect)
@@ -95,12 +106,13 @@ for r in summarized_rects:
 
 
 #display image with boxes around letters
+ 
 cv2.namedWindow('img', 0)
 cv2.imshow('img', vis)
-
-mask = np.zeros((img.shape[0], img.shape[1], 1), dtype=np.uint8)
-for contour in hulls:
-    cv2.drawContours(mask, [contour], -1, (255, 255, 255), -1)
+##
+##mask = np.zeros((img.shape[0], img.shape[1], 1), dtype=np.uint8)
+##for contour in hulls:
+##    cv2.drawContours(mask, [contour], -1, (255, 255, 255), -1)
 
 #display the image with mask, show only the letters
 ##text_only = cv2.bitwise_and(img, img, mask=mask)
