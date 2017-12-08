@@ -61,11 +61,11 @@ for r in range(1,len(rects)):
 cutimages=[]
 for r in summarized_rects:
     x,y,w,h = r
-    cv2.rectangle(vis,(x,y),(x+w,y+h),(0,255,0),2) #draws it to visualize
+    cv2.rectangle(vis,(x,y),(x+1280,y+28),(0,255,0),2) #draws it to visualize
 
     #cuts the image. remember we scaled up the picture for MSER, so divide by 2
     #for pillow to cut.
-    cutimages.append(img_cutversion.crop((x//2,y//2,(x+w)//2,(y+h)//2)))
+    cutimages.append(img_cutversion.crop((x//2,y//2,(x+1280)//2,(y+28)//2)))
 
 #save each of the images in cutimages
 for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving

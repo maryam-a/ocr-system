@@ -6,7 +6,8 @@ from PIL import Image, ImageFont, ImageDraw
 from pathlib import Path
 np.random.seed(123)
 
-#Black against white (huge initial) or white against black
+# Black against white (huge initial) or white against black
+# Monospace fonts: Consolas, Courier New, Lucida Regular Console, UbuntuMono-R, Inconsolata
 TF = ImageFont.truetype('consola.ttf', 18)
 
 def MakeImg(t, f, fn, s = (100, 100), o = (0, 0)):
