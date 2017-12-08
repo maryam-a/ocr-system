@@ -3,9 +3,10 @@ from numpy.random import randint, choice
 import os
 import string
 from PIL import Image, ImageFont, ImageDraw
+from pathlib import Path
 
 #Black against white (huge initial) or white against black
-TF = ImageFont.truetype('consola.ttf', 18)
+TF = ImageFont.truetype('cour.ttf', 16)
 
 def MakeImg(t, f, fn, s = (100, 100), o = (0, 0)):
     '''
@@ -26,10 +27,12 @@ def GetFontSize(S):
     draw = ImageDraw.Draw(img)
     return draw.textsize(S, font = TF)
 
-def GenSingleLine(MINC = 10, MAXC = 64, NIMG = 128, DP = 'Out'):               #Font path
+def GenSingleLine(MINC = 10, MAXC = 64, NIMG = 128, DP = 'Out'):  
+    createDirIfNotPresent(DP)
     #The possible characters to use
     CS = list(string.ascii_letters) + list(string.digits)
     MS = GetFontSize('\n'.join(['0' * MAXC]))   #Size needed to fit MAXC characters
+    print(MS)
     Y = []
     for i in range(NIMG):               #Write images to ./Out/ directory
         Si = ''.join(choice(CS, randint(MINC, MAXC)))
@@ -40,6 +43,7 @@ def GenSingleLine(MINC = 10, MAXC = 64, NIMG = 128, DP = 'Out'):               #
         F.write('\n'.join(Y))
         
 def GenMultiLine(ML = 5, MINC = 10, MAXC = 64, NIMG = 128, DP = 'Img'):
+    createDirIfNotPresent(DP)
     #The possible characters to use
     CS = list(string.ascii_letters) + list(string.digits)
     MS = GetFontSize('\n'.join(ML * ['0' * MAXC]))
@@ -53,6 +57,11 @@ def GenMultiLine(ML = 5, MINC = 10, MAXC = 64, NIMG = 128, DP = 'Img'):
         Y.append(FNi + ',' + for_csv)
     with open('Train.csv', 'w') as F:   #Write CSV file
         F.write('\n'.join(Y))
+
+def createDirIfNotPresent(dirName):
+    # ensure save location is present
+    if not Path(dirName).is_dir():
+        Path(dirName).mkdir()
         
 if __name__ == "__main__":
     # GenMultiLine(MAXC = 128)
