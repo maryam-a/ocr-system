@@ -23,66 +23,56 @@ def overlaps(prev, curr):
     else:
         return ("disjoint", curr)
 
-#img is image for opencv; img_cutversion is for Pillow to cut
-img = cv2.imread('Img/0.png')
-img_cutversion=Image.open('Img/0.png')
+def slice_image(imagepath):
+    #img is image for opencv; img_cutversion is for Pillow to cut
+    img = cv2.imread(imagepath)
+    img_cutversion=Image.open(imagepath)
 
-mser = cv2.MSER_create()
+    mser = cv2.MSER_create()
 
-#Resize the image so that MSER can work better
-img = cv2.resize(img, (img.shape[1]*2, img.shape[0]*2))
+    #Resize the image so that MSER can work better
+    img = cv2.resize(img, (img.shape[1]*2, img.shape[0]*2))
 
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-vis = img.copy() #this is what we see
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    vis = img.copy() #this is what we see
 
-regions = mser.detectRegions(gray)
+    regions = mser.detectRegions(gray)
 
-#gets all the regions detected by mser
-rects = []
-for p in regions[0]:
-    x,y,w,h= cv2.boundingRect(p.reshape(-1, 1, 2)) 
-    rects.append([x,y,w,h])
+    #gets all the regions detected by mser
+    rects = []
+    for p in regions[0]:
+        x,y,w,h= cv2.boundingRect(p.reshape(-1, 1, 2)) 
+        rects.append([x,y,w,h])
 
-#sorts the rectangles based on the y position (row of the picture)
-rects.sort(key=lambda x: x[1])
+    #sorts the rectangles based on the y position (row of the picture)
+    rects.sort(key=lambda x: x[1])
 
-#now combines letters along each row
-summarized_rects = [rects[0]]
-for r in range(1,len(rects)):
-    this = rects[r]
-    prev = summarized_rects[-1]
-    state, average = overlaps(prev, this)
-    if state == "overlap":
-        summarized_rects[-1]=average
-    if state == "disjoint":
-        summarized_rects.append(average)
+    #now combines letters along each row
+    summarized_rects = [rects[0]]
+    for r in range(1,len(rects)):
+        this = rects[r]
+        prev = summarized_rects[-1]
+        state, average = overlaps(prev, this)
+        if state == "overlap":
+            summarized_rects[-1]=average
+        if state == "disjoint":
+            summarized_rects.append(average)
 
-#gets an array of the cut images using pillow
-cutimages=[]
-for r in summarized_rects:
-    x,y,w,h = r
-    cv2.rectangle(vis,(x,y),(x+1280,y+28),(0,255,0),2) #draws it to visualize
+    #gets an array of the cut images using pillow
+    cutimages=[]
+    for r in summarized_rects:
+        x,y,w,h = r
+        cv2.rectangle(vis,(x,y-2),(x+1280,y+28),(0,255,0),2) #draws it to visualize
 
-    #cuts the image. remember we scaled up the picture for MSER, so divide by 2
-    #for pillow to cut.
-    cutimages.append(img_cutversion.crop((x//2,y//2,(x+1280)//2,(y+28)//2)))
+        #cuts the image. remember we scaled up the picture for MSER, so divide by 2
+        #for pillow to cut.
+        cutimages.append(img_cutversion.crop((x//2,(y-2)//2,(x+1280)//2,(y+28)//2)))
 
-#save each of the images in cutimages
-for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving
-    picture = cutimages[index]
-    picture.save('test/image' + str(index) +'.png')
-
-
-#display the image with green boxes around what we've cut
-cv2.namedWindow('img', 0)
-cv2.imshow('img', vis)
-
-
-#press q to close window
-while(cv2.waitKey()!=ord('q')):
-    continue
-cv2.destroyAllWindows()
-
+    #save each of the images in cutimages
+    for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving
+        picture = cutimages[index]
+        img_num = imagepath[4:-4]
+        picture.save('test/image' + str(img_num) + '-' + str(index) +'.png')
 
 
 ###

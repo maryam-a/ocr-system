@@ -21,7 +21,7 @@ def MakeImg(t, f, fn, s = (100, 100), o = (0, 0)):
     '''
     img = Image.new('RGB', s, "white")
     draw = ImageDraw.Draw(img)
-    draw.text((0,-1), t, (0,0,0), font = f)
+    draw.text((0,1), t, (0,0,0), font = f)
     img.save(fn)
     
 def GetFontSize(S):
@@ -54,7 +54,7 @@ def GenMultiLine(ML = 5, MINC = 10, MAXC = 64, NIMG = 128, DP = 'Img'):
     for i in range(NIMG):               #Write images to ./Img/ directory
         temp = list(''.join(choice(CS, randint(MINC, MAXC))) for _ in range(randint(1, ML + 1)))
         Si = '\n\n'.join(temp)
-        for_csv = ','.join(temp)
+        for_csv = '\\n'.join(temp)
         FNi = str(i) + '.png'
         MakeImg(Si, TF, os.path.join(DP, FNi), MS)
         Y.append(FNi + ',' + for_csv)
@@ -65,7 +65,9 @@ def createDirIfNotPresent(dirName):
     # ensure save location is present
     if not Path(dirName).is_dir():
         Path(dirName).mkdir()
+
+
         
 if __name__ == "__main__":
     GenMultiLine()
-    # GenSingleLine(NIMG = 1024)
+    GenSingleLine(NIMG = 1024)
