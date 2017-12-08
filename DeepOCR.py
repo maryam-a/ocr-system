@@ -5,6 +5,10 @@ import sys
 from skimage.io import imread
 from sklearn import model_selection
 from TFANN import ANNC
+import csv
+import cuts_lines
+
+np.random.seed(123)
 
 def DivideIntoSubimages(I):
     '''
@@ -97,9 +101,45 @@ if not cnnc.RestoreModel('TFModel/', 'ocrnet'):
 else:
     with open('TFModel/_classes.txt') as F:
         cnnc.RestoreClasses(F.read().splitlines())
+
+def loadCSV(csv_file):
+    csv_dict = {}
+    with open(csv_file, newline='') as CF:
+        for line in CF:
+            img_file, original_text = line.strip().split(',')
+            csv_dict[img_file] = original_text
+    return csv_dict
     
 if __name__ == "__main__":
+    '''
+    Plan:
+    [/] take the input image and split it into the lines
+    [/] for each, run image to string, combining the results
+    [/] show what it should be
+    [/] show result
+    [] show accuracy
+
+    Once that works:
+    [] Clean this up and make own
+    [] Put on AWS and train a lot
+    '''
+    csv_dict = loadCSV('Train.csv')
+
     for img in sys.argv[1:]:
-        I = imread(img)
-        S = ImageToString(I)
-        print(S)
+        print('\nThis is the original text')
+        text = csv_dict[img[4:]]
+        print(text.replace("\\n", "\n"))
+        cuts_lines.slice_image(img)
+
+        print("\nThis is our guess")
+        result = ""
+        for dirname, dirnames, filenames in os.walk('test/'):
+            for filename in filenames:
+                if 'image' + img[4:-4] in filename:
+                    I = imread('test/' + filename)
+                    S = ImageToString(I)
+                    result = result + S
+                    print(S)
+        
+        # print("\nAccuracy")
+        
