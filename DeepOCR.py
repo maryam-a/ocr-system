@@ -115,8 +115,8 @@ if __name__ == "__main__":
     Plan:
     [/] take the input image and split it into the lines
     [/] for each, run image to string, combining the results
-    [] show what it should be (which means should create test.csv or something)
-    [] show result
+    [/] show what it should be
+    [/] show result
     [] show accuracy
 
     Once that works:
@@ -131,10 +131,15 @@ if __name__ == "__main__":
         print(text.replace("\\n", "\n"))
         cuts_lines.slice_image(img)
 
-        print("\n This is our guess")
+        print("\nThis is our guess")
+        result = ""
         for dirname, dirnames, filenames in os.walk('test/'):
             for filename in filenames:
                 if 'image' + img[4:-4] in filename:
                     I = imread('test/' + filename)
                     S = ImageToString(I)
+                    result = result + S
                     print(S)
+        
+        # print("\nAccuracy")
+        
