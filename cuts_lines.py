@@ -2,6 +2,7 @@
 import cv2
 import numpy as np
 from PIL import Image
+np.random.seed(123)
 
 #checks whether two images overlap. If they do, return a larger bounding box.
 def overlaps(prev, curr):
@@ -23,8 +24,8 @@ def overlaps(prev, curr):
         return ("disjoint", curr)
 
 #img is image for opencv; img_cutversion is for Pillow to cut
-img = cv2.imread('sample_screenshots/testscrnshot.png')
-img_cutversion=Image.open('sample_screenshots/testscrnshot.png')
+img = cv2.imread('Img/0.png')
+img_cutversion=Image.open('Img/0.png')
 
 mser = cv2.MSER_create()
 
@@ -69,7 +70,7 @@ for r in summarized_rects:
 #save each of the images in cutimages
 for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving
     picture = cutimages[index]
-    picture.save('image' + str(index) +'.png')
+    picture.save('test/image' + str(index) +'.png')
 
 
 #display the image with green boxes around what we've cut

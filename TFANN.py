@@ -6,6 +6,7 @@ and convolutional neural networks (CNN) are supported.
 '''
 import tensorflow as tf
 import numpy as np
+np.random.seed(123)
 
 def _Accuracy(Y, YH):
     '''

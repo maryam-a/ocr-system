@@ -5,6 +5,7 @@ import sys
 from skimage.io import imread
 from sklearn import model_selection
 from TFANN import ANNC
+np.random.seed(123)
 
 def DivideIntoSubimages(I):
     '''
@@ -99,6 +100,18 @@ else:
         cnnc.RestoreClasses(F.read().splitlines())
     
 if __name__ == "__main__":
+    '''
+    Plan:
+    - take the input image and split it into the lines
+    - for each, run image to string, combining the results
+    - show what it should be (which means should create test.csv or something)
+    - show result
+    - show accuracy
+
+    Once that works:
+    - Clean this up and make own
+    - Put on AWS and train a lot
+    '''
     for img in sys.argv[1:]:
         I = imread(img)
         S = ImageToString(I)
