@@ -1,5 +1,7 @@
 def compareString(a, b, i, j, memo={}): 
     """
+    this function is internally used by the fractionAccuracy function below
+    
     returns the minimum number of changes needed, to get from a to b string.
     changes are either insertions, replacements, or deletions
     
@@ -33,7 +35,7 @@ def compareString(a, b, i, j, memo={}):
     return memo[(a,b,i,j)]
 
 
-def fractionAccuracy(predicted,correct): #set one of these to be t
+def fractionAccuracy(predicted,correct):
     """
     predicted, correct: 2 strings to compare
     returns the accuracy (difference from correct string) as a fraction from 0-1
