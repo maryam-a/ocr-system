@@ -44,4 +44,12 @@ def fractionAccuracy(predicted,correct):
     """
     difference = compareString(predicted,correct,len(predicted),len(correct))
     print('number of differences', difference)
+
+    #case where the correct string is empty string
+    if len(correct) == 0:
+        if difference == 0:
+            return 1 #both are empty string, correct
+        return 0 #difference is not an empty string, incorrect
+
+    #otherwise, this division is fine
     return 1-difference/len(correct)
