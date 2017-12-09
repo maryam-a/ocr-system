@@ -7,7 +7,7 @@ import numpy as np
 from skimage.io import imread
 from sklearn import model_selection
 from TFANN import ANNC # to change later
-# import cuts_lines
+import cuts_lines
 
 # Setting the seed
 np.random.seed(123)
@@ -15,11 +15,15 @@ np.random.seed(123)
 # Constant Values
 DATA_ROOT = 'data/'
 SL_DIR = DATA_ROOT + 'single_line/'
+ML_DIR = DATA_ROOT + 'multiple_lines/'
 SL_FILE = DATA_ROOT + 'sl_data.txt'
+ML_FILE = DATA_ROOT + 'ml_data.txt'
 IMAGE_ENCODING = '.png'
 MAX_CHARS = 64
 NUM_CHARS = len(string.ascii_letters + string.digits + ' ') # + string.punctuation
 IMAGE_SIZE = (14, 640, 3) # image size for the CNN
+
+ITERS = 10000
 
 def load_data(train_dir=SL_DIR, train_file=SL_FILE):
     '''
@@ -106,6 +110,19 @@ def arrange_text(text, size):
     predicted_text = predicted_text.reshape(size)
     return '\n'.join(''.join(pp_text for pp_text in p_text) for p_text in predicted_text)
 
+def load_multiline_data(filepath=ML_FILE):
+    '''
+    Load ground truths about images into a dictionary
+    filepath: string, The path to the directory with the images of interest
+    '''
+    ml_data = {}
+    with open(filepath, newline='') as ml_file:
+        for line in ml_file:
+            filename, text = line.strip().split(IMAGE_ENCODING + ' ')
+            filename = filename + IMAGE_ENCODING
+            ml_data[filename] = text
+    return ml_data
+
 # TODO: Change this
 # Architecture for the Convolutional Neural Network
 ws = [('C', [4, 4,  3, NUM_CHARS // 2], [1, 2, 2, 1]), ('AF', 'relu'), 
@@ -156,7 +173,22 @@ else:
 
 
 if __name__ == "__main__":
+    # Input files should be 'data/multiple_lines/x.png'
+
+    #TODO: Change num iters, image number
+    ml_data = load_multiline_data()
+
     for img in sys.argv[1:]:
-        I = imread(img)
-        S = predict_string_from_image(I)
-        print(S)
+        print('\nThis is the original text')
+        image_name = img.split(ML_DIR)[1]
+        text = ml_data[image_name]
+        print(text.replace("\\n", "\n"))
+        cuts_lines.slice_image(img)
+
+        print("\nThis is our guess")
+        for dirname, dirnames, filenames in os.walk('test/'):
+            for filename in filenames:
+                if 'image' + image_name[:-4] in filename:
+                    image = imread('test/' + filename)
+                    prediction = predict_string_from_image(image)
+                    print(prediction)
