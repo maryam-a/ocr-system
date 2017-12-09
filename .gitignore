@@ -1,7 +1,7 @@
 **.pdf
-**.csv
-Img/
-Out/
+# **.csv
+# Img/
+# Out/
 TFModel/
 .DS_Store
 .vscode/
