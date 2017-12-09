@@ -120,7 +120,9 @@ if __name__ == "__main__":
     [] show accuracy
 
     Once that works:
-    [] Clean this up and make own
+    [/] OCRGen.py -> generate_images.py
+    [] DeepOCR.py -> ocr.py
+    [] TFANN.py -> ????
     [] Put on AWS and train a lot
     '''
     csv_dict = loadCSV('Train.csv')
