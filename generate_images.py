@@ -10,8 +10,14 @@ from pathlib import Path
 np.random.seed(123)
 
 # Constant Values
-TEXT_FONT = 'consola.ttf' # Consolas, Courier New, Lucida Regular Console, UbuntuMono-R, Inconsolata
-TEXT_SIZE = 18            #       18,          17,                       ,             ,
+FONT_BANK = {
+    'consola.ttf': 18,
+    'cour.ttf': 16,
+    'lucon.ttf': 17,
+    'OCRATEXT.ttf': 16
+}
+TEXT_FONT = 'consola.ttf'
+TEXT_SIZE = FONT_BANK[TEXT_FONT]
 IMAGE_FONT = ImageFont.truetype(TEXT_FONT, TEXT_SIZE)
 IMAGE_MODE = 'RGB'
 BACKGROUND_COLOR = 'white'
