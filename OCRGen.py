@@ -8,7 +8,7 @@ np.random.seed(123)
 
 # Black against white (huge initial) or white against black
 # Monospace fonts: Consolas, Courier New, Lucida Regular Console, UbuntuMono-R, Inconsolata
-TF = ImageFont.truetype('consola.ttf', 18)
+TF = ImageFont.truetype('OCRAEXT.TTF', 16)
 
 def MakeImg(t, f, fn, s = (100, 100), o = (0, 0)):
     '''
@@ -21,7 +21,7 @@ def MakeImg(t, f, fn, s = (100, 100), o = (0, 0)):
     '''
     img = Image.new('RGB', s, "white")
     draw = ImageDraw.Draw(img)
-    draw.text((0,1), t, (0,0,0), font = f)
+    draw.text((0,-1), t, (0,0,0), font = f)
     img.save(fn)
     
 def GetFontSize(S):
@@ -50,17 +50,17 @@ def GenMultiLine(ML = 5, MINC = 10, MAXC = 64, NIMG = 128, DP = 'Img'):
     #The possible characters to use
     CS = list(string.ascii_letters) + list(string.digits)
     MS = GetFontSize('\n'.join(ML * ['0' * MAXC]))
-    print(MS)
-    # Y = []
-    # for i in range(NIMG):               #Write images to ./Img/ directory
-    #     temp = list(''.join(choice(CS, randint(MINC, MAXC))) for _ in range(randint(1, ML + 1)))
-    #     Si = '\n\n'.join(temp)
-    #     for_csv = '\\n'.join(temp)
-    #     FNi = str(i) + '.png'
-    #     MakeImg(Si, TF, os.path.join(DP, FNi), MS)
-    #     Y.append(FNi + ',' + for_csv)
-    # with open('Train.csv', 'w') as F:   #Write CSV file
-    #     F.write('\n'.join(Y))
+    # print(MS)
+    Y = []
+    for i in range(NIMG):               #Write images to ./Img/ directory
+        temp = list(''.join(choice(CS, randint(MINC, MAXC))) for _ in range(randint(1, ML + 1)))
+        Si = '\n\n'.join(temp)
+        for_csv = '\\n'.join(temp)
+        FNi = str(i) + '.png'
+        MakeImg(Si, TF, os.path.join(DP, FNi), MS)
+        Y.append(FNi + ',' + for_csv)
+    with open('Train.csv', 'w') as F:   #Write CSV file
+        F.write('\n'.join(Y))
 
 def createDirIfNotPresent(dirName):
     # ensure save location is present
@@ -70,5 +70,5 @@ def createDirIfNotPresent(dirName):
 
         
 if __name__ == "__main__":
-    GenMultiLine(ML=10, NIMG=1024)
-    # GenSingleLine(NIMG = 1024)
+    # GenMultiLine(ML=10, NIMG=1024)
+    GenSingleLine(NIMG = 1)

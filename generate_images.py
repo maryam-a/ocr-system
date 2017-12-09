@@ -82,7 +82,7 @@ def create_dir_if_not_present(dir_name):
     if not Path(dir_name).is_dir():
         Path(dir_name).mkdir()
 
-def create_single_line_text_image(min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_images=N_IMAGES,
+def create_single_line_text_images(min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_images=N_IMAGES,
                                   save_dir=SL_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
                                   offset=TEXT_OFFSET, font_color=TEXT_COLOR):
     '''
@@ -98,6 +98,7 @@ def create_single_line_text_image(min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_im
     '''
     create_dir_if_not_present(save_dir)
     size = get_ideal_text_image_size(max_chars, 1, font, background)
+    print("This should be (640,14): " size)
 
     all_lines = []
     for i in range(num_images):
@@ -110,7 +111,7 @@ def create_single_line_text_image(min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_im
     with open(SL_DATA, 'w') as output_file:
         output_file.write('\n'.join(all_lines))
 
-def create_multiple_line_text_image(num_lines=N_LINES, min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_images=N_IMAGES,
+def create_multiple_line_text_images(num_lines=N_LINES, min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_images=N_IMAGES,
                                     save_dir=ML_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
                                     offset=TEXT_OFFSET, font_color=TEXT_COLOR):
     '''
@@ -148,5 +149,5 @@ def create_multiple_line_text_image(num_lines=N_LINES, min_chars=MIN_CHAR, max_c
 
 if __name__ == "__main__":
     create_dir_if_not_present(DATA_ROOT)
-    create_single_line_text_image()
-    create_multiple_line_text_image()
+    create_single_line_text_images()
+    create_multiple_line_text_images()
