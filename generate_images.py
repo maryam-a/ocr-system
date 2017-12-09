@@ -25,9 +25,9 @@ TEXT_COLOR = (0, 0, 0)
 TEXT_OFFSET = (0, -1)
 MIN_CHAR = 10
 MAX_CHAR = 64
-N_IMAGES = 10 #1024
+N_IMAGES = 128 #1024
 N_LINES = 10
-POSSIBLE_CHARS = list(string.ascii_letters) + list(string.digits) + list(string.punctuation) + [' ']
+POSSIBLE_CHARS = list(string.ascii_letters) + list(string.digits) + [' '] # + list(string.punctuation)
 DATA_ROOT = 'data/'
 IMAGE_ENCODING = '.png'
 
@@ -98,7 +98,7 @@ def create_single_line_text_images(min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_i
     '''
     create_dir_if_not_present(save_dir)
     size = get_ideal_text_image_size(max_chars, 1, font, background)
-    print("This should be (640,14): " size)
+    print("This should be (640, 14): " + str(size))
 
     all_lines = []
     for i in range(num_images):
@@ -121,8 +121,8 @@ def create_multiple_line_text_images(num_lines=N_LINES, min_chars=MIN_CHAR, max_
     max_chars:  int, The maximum number of characters for the text
     num_images: int, The number of images to create
     save_dir:   string, The directory to save the images to
-    font:           FreeTypeFont, The font used to style the text
-    background:     string, The color of the image itself
+    font:       FreeTypeFont, The font used to style the text
+    background: string, The color of the image itself
     offset:     (x, y), The text offset in the image; (0,0) is the top left corner
     '''
     create_dir_if_not_present(save_dir)

@@ -8,7 +8,7 @@ np.random.seed(123)
 
 # Black against white (huge initial) or white against black
 # Monospace fonts: Consolas, Courier New, Lucida Regular Console, UbuntuMono-R, Inconsolata
-TF = ImageFont.truetype('OCRAEXT.TTF', 16)
+TF = ImageFont.truetype('consola.ttf', 18)
 
 def MakeImg(t, f, fn, s = (100, 100), o = (0, 0)):
     '''
@@ -32,7 +32,7 @@ def GetFontSize(S):
 def GenSingleLine(MINC = 10, MAXC = 64, NIMG = 128, DP = 'Out'):  
     createDirIfNotPresent(DP)
     #The possible characters to use
-    CS = list(string.ascii_letters) + list(string.digits)
+    CS = list(string.ascii_letters) + list(string.digits) + [' ']
     MS = GetFontSize('\n'.join(['0' * MAXC]))   #Size needed to fit MAXC characters
     print(MS)
     
@@ -71,4 +71,4 @@ def createDirIfNotPresent(dirName):
         
 if __name__ == "__main__":
     # GenMultiLine(ML=10, NIMG=1024)
-    GenSingleLine(NIMG = 1)
+    GenSingleLine()
