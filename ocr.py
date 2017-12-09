@@ -132,12 +132,12 @@ ws = [('C', [4, 4,  3, NUM_CHARS // 2], [1, 2, 2, 1]), ('AF', 'relu'),
 
 # Building the model
 # TODO: Change this
-cnnc = ANNC(IMAGE_SIZE, ws, batchSize = 64, learnRate = 5e-5, maxIter = 32, reg = 1e-5, tol = 1e-2, verbose = True)
+cnnc = ANNC(IMAGE_SIZE, ws, batchSize = 64, learnRate = 5e-5, maxIter = ITERS, reg = 1e-5, tol = 1e-2, verbose = True)
 if not cnnc.RestoreModel('TFModel/', 'ocrnet'):
     images, gt_padding, gt, image_names = load_data()
 
     # Shuffle and split data
-    shuffled_data = model_selection.ShuffleSplit(n_splits = 1, random_state = 42)
+    shuffled_data = model_selection.ShuffleSplit(n_splits = 1, random_state = 123)
     train, test = next(shuffled_data.split(images))
 
     # Fit data to neural network
@@ -158,9 +158,9 @@ if not cnnc.RestoreModel('TFModel/', 'ocrnet'):
     print('\nTrain accuracy: ' + str(train_acc))
     print('Test accuracy: ' + str(test_acc))
 
-    # Show the ground truth and the predicted text
-    for guess, text, name in zip(prediction_string, gt, image_names):
-        print(name + ': ' + text + ' -> ' + guess)
+    # Debug: Show the ground truth and the predicted text
+    # for guess, text, name in zip(prediction_string, gt, image_names):
+    #     print(name + ': ' + text + ' -> ' + guess)
 
     # Save model for next time
     cnnc.SaveModel(os.path.join('TFModel', 'ocrnet'))
