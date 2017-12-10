@@ -133,7 +133,7 @@ ws = [('C', [4, 4,  3, NUM_CHARS // 2], [1, 2, 2, 1]), ('AF', 'relu'),
 # Building the model
 # TODO: Change this
 cnnc = ANNC(IMAGE_SIZE, ws, batchSize = 64, learnRate = 5e-5, maxIter = ITERS, reg = 1e-5, tol = 1e-2, verbose = True)
-if not cnnc.RestoreModel('TFModel/', 'ocrnet'):
+if not cnnc.RestoreModel('TFModelC/', 'ocrnet'):
     images, gt_padding, gt, image_names = load_data()
 
     # Shuffle and split data
@@ -163,12 +163,12 @@ if not cnnc.RestoreModel('TFModel/', 'ocrnet'):
     #     print(name + ': ' + text + ' -> ' + guess)
 
     # Save model for next time
-    cnnc.SaveModel(os.path.join('TFModel', 'ocrnet'))
-    with open('TFModel/_classes.txt', 'w') as F:
+    cnnc.SaveModel(os.path.join('TFModelC', 'ocrnet'))
+    with open('TFModelC/_classes.txt', 'w') as F:
         F.write('\n'.join(cnnc._classes))
 
 else:
-    with open('TFModel/_classes.txt') as F:
+    with open('TFModelC/_classes.txt') as F:
         cnnc.RestoreClasses(F.read().splitlines())
 
 
