@@ -16,7 +16,7 @@ FONT_BANK = {
     'lucon.ttf': 17,
     'OCRAEXT.TTF': 16
 }
-TEXT_FONT = 'cour.ttf'
+TEXT_FONT = 'lucon.ttf'
 TEXT_SIZE = FONT_BANK[TEXT_FONT]
 IMAGE_FONT = ImageFont.truetype(TEXT_FONT, TEXT_SIZE)
 IMAGE_MODE = 'RGB'
