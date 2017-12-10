@@ -23,7 +23,7 @@ MAX_CHARS = 64
 NUM_CHARS = len(string.ascii_letters + string.digits + ' ') # + string.punctuation
 IMAGE_SIZE = (14, 640, 3) # image size for the CNN
 
-ITERS = 10000
+ITERS = 500
 
 def load_data(train_dir=SL_DIR, train_file=SL_FILE):
     '''
