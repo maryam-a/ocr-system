@@ -16,7 +16,7 @@ FONT_BANK = {
     'lucon.ttf': 17,
     'OCRAEXT.TTF': 16
 }
-TEXT_FONT = 'OCRAEXT.TTF'
+TEXT_FONT = 'consola.ttf'
 TEXT_SIZE = FONT_BANK[TEXT_FONT]
 IMAGE_FONT = ImageFont.truetype(TEXT_FONT, TEXT_SIZE)
 IMAGE_MODE = 'RGB'
@@ -25,7 +25,7 @@ TEXT_COLOR = (0, 0, 0)
 TEXT_OFFSET = (0, -1)
 MIN_CHAR = 10
 MAX_CHAR = 64
-N_IMAGES = 100000
+N_IMAGES = 10000
 N_LINES = 10
 POSSIBLE_CHARS = list(string.ascii_letters) + list(string.digits) + [' '] # + list(string.punctuation)
 DATA_ROOT = 'data/'
@@ -150,4 +150,4 @@ def create_multiple_line_text_images(num_lines=N_LINES, min_chars=MIN_CHAR, max_
 if __name__ == "__main__":
     create_dir_if_not_present(DATA_ROOT)
     create_single_line_text_images()
-    create_multiple_line_text_images()
+    create_multiple_line_text_images(num_images=100)

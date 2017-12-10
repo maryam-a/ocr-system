@@ -70,5 +70,5 @@ def createDirIfNotPresent(dirName):
 
         
 if __name__ == "__main__":
-    # GenMultiLine(ML=10, NIMG=1024)
-    GenSingleLine()
+    # GenMultiLine(NIMG=1024)
+    GenSingleLine(NIMG=1024)
