@@ -201,7 +201,7 @@ if __name__ == "__main__":
                 #     image = imread('test/' + filename)
                 #     prediction = predict_string_from_image(image)
                 #     print(prediction)
-                if 'demo.png' in filename:
+                if 'demo-' in filename:
                     image = imread('test/' + filename)
                     prediction = predict_string_from_image(image)
                     print(prediction)
