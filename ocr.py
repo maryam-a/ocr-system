@@ -5,8 +5,8 @@ import sys
 import string
 import numpy as np
 from skimage.io import imread
-# from sklearn import model_selection
-# from TFANN import ANNC # to change later
+from sklearn import model_selection
+from TFANN import ANNC # to change later
 import cuts_lines
 
 # Setting the seed
