@@ -3,7 +3,7 @@
 Img/
 Out/
 TFModel/
-data/
+#data/
 .DS_Store
 .vscode/
 test/
