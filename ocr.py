@@ -195,13 +195,18 @@ if __name__ == "__main__":
         cuts_lines.slice_image(img)
 
         print("\nThis is our guess")
-        for dirname, dirnames, filenames in os.walk('test/'):
-            for filename in filenames:
+        for i in range(18):
+            image = imread('test/demo-' + str(i) + '.png')
+            prediction = predict_string_from_image(image)
+            print(prediction)
+
+
+
+
+        # for dirname, dirnames, filenames in os.walk('test/'):
+        #     for filename in filenames:
                 # if 'image' + image_name[:-4] in filename:
                 #     image = imread('test/' + filename)
                 #     prediction = predict_string_from_image(image)
                 #     print(prediction)
-                if 'demo-' in filename:
-                    image = imread('test/' + filename)
-                    prediction = predict_string_from_image(image)
-                    print(prediction)
+                    
