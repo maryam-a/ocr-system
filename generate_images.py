@@ -16,7 +16,7 @@ FONT_BANK = {
     'lucon.ttf': 17,
     'OCRAEXT.TTF': 16
 }
-TEXT_FONT = 'lucon.ttf'
+TEXT_FONT = 'cour.ttf'
 TEXT_SIZE = FONT_BANK[TEXT_FONT]
 IMAGE_FONT = ImageFont.truetype(TEXT_FONT, TEXT_SIZE)
 IMAGE_MODE = 'RGB'
@@ -37,6 +37,8 @@ SL_DATA = DATA_ROOT + 'sl_data.txt'
 # Multiple Line
 ML_DIR = DATA_ROOT + 'multiple_lines'
 ML_DATA = DATA_ROOT + 'ml_data.txt'
+# Demo Data
+DEMO_DIR = 'data/demo'
 
 def create_text_image(text, filename, size, font=IMAGE_FONT, offset=TEXT_OFFSET,
                       background=BACKGROUND_COLOR, font_color=TEXT_COLOR):
@@ -147,7 +149,25 @@ def create_multiple_line_text_images(num_lines=N_LINES, min_chars=MIN_CHAR, max_
     with open(ML_DATA, 'w') as output_file:
         output_file.write('\n'.join(all_lines))
 
+def create_demo_data(textfile, max_chars=MAX_CHAR,
+                    save_dir=DEMO_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
+                    offset=TEXT_OFFSET, font_color=TEXT_COLOR):
+    create_dir_if_not_present(DEMO_DIR)
+
+    all_lines = []
+    with open(textfile) as demo_text:
+        for line in demo_text:
+            print(line.strip())
+            all_lines.append(line.strip())
+
+    size = get_ideal_text_image_size(max_chars, len(all_lines), font, background)
+    
+    image_text = '\n\n'.join(all_lines)
+    image_name = 'demo.png'
+    create_text_image(image_text, DEMO_DIR + '/' + image_name, size, font, offset, background, font_color)
+
 if __name__ == "__main__":
-    create_dir_if_not_present(DATA_ROOT)
-    create_single_line_text_images()
-    create_multiple_line_text_images(num_images=100)
+    # create_dir_if_not_present(DATA_ROOT)
+    # create_single_line_text_images()
+    # create_multiple_line_text_images(num_images=100)
+    create_demo_data('data/demo.txt')

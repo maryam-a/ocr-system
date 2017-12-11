@@ -5,8 +5,8 @@ import sys
 import string
 import numpy as np
 from skimage.io import imread
-from sklearn import model_selection
-from TFANN import ANNC # to change later
+# from sklearn import model_selection
+# from TFANN import ANNC # to change later
 import cuts_lines
 
 # Setting the seed
@@ -16,6 +16,7 @@ np.random.seed(123)
 DATA_ROOT = 'data/'
 SL_DIR = DATA_ROOT + 'single_line/'
 ML_DIR = DATA_ROOT + 'multiple_lines/'
+DEMO_DIR = DATA_ROOT + 'demo/'
 SL_FILE = DATA_ROOT + 'sl_data.txt'
 ML_FILE = DATA_ROOT + 'ml_data.txt'
 IMAGE_ENCODING = '.png'
@@ -133,7 +134,7 @@ ws = [('C', [4, 4,  3, NUM_CHARS // 2], [1, 2, 2, 1]), ('AF', 'relu'),
 # Building the model
 # TODO: Change this
 cnnc = ANNC(IMAGE_SIZE, ws, batchSize = 64, learnRate = 5e-5, maxIter = ITERS, reg = 1e-5, tol = 1e-2, verbose = True)
-if not cnnc.RestoreModel('TFModelLuc/', 'ocrnet'):
+if not cnnc.RestoreModel('TFModelCour/', 'ocrnet'):
     images, gt_padding, gt, image_names = load_data()
 
     # Shuffle and split data
@@ -163,12 +164,12 @@ if not cnnc.RestoreModel('TFModelLuc/', 'ocrnet'):
     #     print(name + ': ' + text + ' -> ' + guess)
 
     # Save model for next time
-    cnnc.SaveModel(os.path.join('TFModelLuc', 'ocrnet'))
-    with open('TFModelLuc/_classes.txt', 'w') as F:
+    cnnc.SaveModel(os.path.join('TFModelCour', 'ocrnet'))
+    with open('TFModelCour/_classes.txt', 'w') as F:
         F.write('\n'.join(cnnc._classes))
 
 else:
-    with open('TFModelLuc/_classes.txt') as F:
+    with open('TFModelCour/_classes.txt') as F:
         cnnc.RestoreClasses(F.read().splitlines())
 
 
@@ -179,16 +180,28 @@ if __name__ == "__main__":
     ml_data = load_multiline_data()
 
     for img in sys.argv[1:]:
+        # For random data
         print('\nThis is the original text')
-        image_name = img.split(ML_DIR)[1]
-        text = ml_data[image_name]
-        print(text.replace("\\n", "\n"))
+        # image_name = img.split(ML_DIR)[1]
+        # text = ml_data[image_name]
+        # print(text.replace("\\n", "\n"))
+        # cuts_lines.slice_image(img)
+
+        # For demo
+        image_name = img.split(DEMO_DIR)[1]
+        with open('data/demo.txt') as demo_text:
+            for line in demo_text:
+                print(line.strip())
         cuts_lines.slice_image(img)
 
         print("\nThis is our guess")
         for dirname, dirnames, filenames in os.walk('test/'):
             for filename in filenames:
-                if 'image' + image_name[:-4] in filename:
+                # if 'image' + image_name[:-4] in filename:
+                #     image = imread('test/' + filename)
+                #     prediction = predict_string_from_image(image)
+                #     print(prediction)
+                if 'demo.png' in filename:
                     image = imread('test/' + filename)
                     prediction = predict_string_from_image(image)
                     print(prediction)

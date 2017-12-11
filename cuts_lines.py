@@ -84,8 +84,9 @@ def slice_image(imagepath):
     #save each of the images in cutimages
     for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving
         picture = cutimages[index]
-        img_num = imagepath.split(ML_DIR)[1][:-4] #imagepath[4:-4]
-        picture.save('test/image' + str(img_num) + '-' + str(index) +'.png')
+        # img_num = imagepath.split(ML_DIR)[1][:-4] #imagepath[4:-4]
+        # picture.save('test/image' + str(img_num) + '-' + str(index) +'.png')
+        picture.save('test/demo' + '-' + str(index) +'.png')
 
     # #display the image with green boxes around what we've cut
     # cv2.namedWindow('img', 0)
