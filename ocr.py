@@ -41,7 +41,7 @@ CURRENT_MODEL_DIR = TEXT_INFO[TEXT_FONT]['model']
 NN_DIR = 'ocr-nn'
 MODEL_CLASSES = CURRENT_MODEL_DIR + '/_classes.txt'
 
-ITERS = 100
+ITERS = 500
 
 def load_data(train_dir=SL_DIR, train_file=SL_FILE):
     '''

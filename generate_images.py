@@ -40,7 +40,7 @@ TEXT_COLOR = (0, 0, 0)
 TEXT_OFFSET = (0, -1)
 MIN_CHAR = 10
 MAX_CHAR = 64
-N_IMAGES = 10000
+N_IMAGES = 20000
 N_LINES = 10
 POSSIBLE_CHARS = list(string.ascii_letters) + list(string.digits) + [' ']
 

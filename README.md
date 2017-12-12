@@ -1,1 +1,1 @@
-# ocr-systerm
+# ocr-system
