@@ -1,5 +1,6 @@
 '''
-TFANN.py
+Source: https://github.com/nicholastoddsmith/pythonml/blob/master/TFANN/TFANN.py
+
 This file contains classes implementing ANN using numpy 
 and tensorflow. Presently, multi-layer perceptron (MLP) 
 and convolutional neural networks (CNN) are supported.
