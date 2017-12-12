@@ -1,3 +1,4 @@
+# Author: Gloria Fang
 
 import cv2
 import numpy as np

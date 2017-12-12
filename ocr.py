@@ -143,6 +143,8 @@ def load_multiline_data(filepath=ML_FILE):
 
 def predict_multiline(a):
     '''
+    Outputs the ground truth and prediction for a multiple line image.
+    a: string, The image path
     '''
     ml_data = load_multiline_data()
     print('\nThis is the original text')
@@ -159,6 +161,10 @@ def predict_multiline(a):
         print(prediction)
 
 def predict_demo(a):
+    '''
+    Outputs the ground truth and prediction for a demo image.
+    a: string, The image path
+    '''
     image_name = a.split(DEMO_DIR)[1]
     with open('data/demo.txt') as demo_text:
         for line in demo_text:
@@ -234,10 +240,3 @@ if __name__ == "__main__":
 
         else:
             print("Usage: %s -s singleline -m multiline -d demo" % sys.argv[0])
-
-# Input files should be 'data/multiple_lines/x.png'     
-
-# # python3 ocr.py 'data/demo/demo.png'
-
-# # TODO: actually go through order
-# # TODO: make the other images
