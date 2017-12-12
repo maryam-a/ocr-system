@@ -1,12 +1,14 @@
 **.pdf
-# **.csv
-# Img/
-# Out/
+**.csv
+Img/
+Out/
 TFModel/
+#data/
 .DS_Store
 .vscode/
 test/
 sample_screenshots/
+loss/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

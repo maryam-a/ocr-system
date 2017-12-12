@@ -1,8 +1,25 @@
+# Author: Gloria Fang
 
 import cv2
 import numpy as np
 from PIL import Image
+from pathlib import Path
 np.random.seed(123)
+
+DATA_ROOT = 'data/'
+ML_DIR = DATA_ROOT + 'multiple_lines/'
+
+TEXT_INFO = {
+    'consola.ttf': {'size': 18, 'dir': 'consola/'},
+    'cour.ttf': {'size': 16, 'dir': 'cour/'},
+    'lucon.ttf': {'size': 17, 'dir': 'lucon/'},
+    'OCRAEXT.TTF': {'size': 16, 'dir': 'ocr-a/'}
+}
+
+TEXT_FONT = 'OCRAEXT.TTF' # Change this
+TEXT_SIZE = TEXT_INFO[TEXT_FONT]['size']
+CURRENT_ML_DIR = ML_DIR + TEXT_INFO[TEXT_FONT]['dir']
+TEST_DIR = 'test'
 
 #checks whether two images overlap. If they do, return a larger bounding box.
 def overlaps(prev, curr):
@@ -23,7 +40,17 @@ def overlaps(prev, curr):
     else:
         return ("disjoint", curr)
 
-def slice_image(imagepath):
+def create_dir_if_not_present(dir_name):
+    '''
+    Ensures that the directory is present. Creates it if necessary.
+    dir_name:   The name of the directory of interest
+    '''
+    if not Path(dir_name).is_dir():
+        Path(dir_name).mkdir()
+
+def slice_image(imagepath, data_type):
+    # data_type: 'm' if multiple lines, 'd' if demo
+    create_dir_if_not_present(TEST_DIR)
     #img is image for opencv; img_cutversion is for Pillow to cut
     img = cv2.imread(imagepath)
     img_cutversion=Image.open(imagepath)
@@ -62,19 +89,33 @@ def slice_image(imagepath):
     cutimages=[]
     for r in summarized_rects:
         x,y,w,h = r
-        cv2.rectangle(vis,(x,y-2),(x+1280,y+28),(0,255,0),2) #draws it to visualize
+        cv2.rectangle(vis,(x,y-4),(x+1280,y+28),(0,255,0),2) #draws it to visualize
 
         #cuts the image. remember we scaled up the picture for MSER, so divide by 2
         #for pillow to cut.
-        cutimages.append(img_cutversion.crop((x//2,(y-2)//2,(x+1280)//2,(y+28)//2)))
+        cutimages.append(img_cutversion.crop((x//2,(y-4)//2,(x+1280)//2,(y+28)//2)))
 
     #save each of the images in cutimages
     for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving
         picture = cutimages[index]
-        img_num = imagepath[4:-4]
-        picture.save('test/image' + str(img_num) + '-' + str(index) +'.png')
+        if data_type == 'm':
+            img_num = imagepath.split(CURRENT_ML_DIR)[1][:-4]
+            picture.save(TEST_DIR + '/image' + str(img_num) + '-' + str(index) +'.png')
+        elif data_type == 'd':
+            picture.save(TEST_DIR + '/demo' + '-' + str(index) +'.png')
+        else: 
+            pass
+
+    # For debugging purposes, uncomment below
+    # #display the image with green boxes around what we've cut
+    # cv2.namedWindow('img', 0)
+    # cv2.imshow('img', vis)
 
 
-###
+    # #press q to close window
+    # while(cv2.waitKey()!=ord('q')):
+    #     continue
+    # cv2.destroyAllWindows()
+
 #code for getting only letters
 #https://stackoverflow.com/questions/44185854/extract-text-from-image-using-mser-in-opencv-python
