@@ -27,7 +27,7 @@ TEXT_INFO = {
     'OCRAEXT.TTF': {'size': 16, 'dir': '/ocr-a'}
 }
 
-TEXT_FONT = 'lucon.ttf' # Change this
+TEXT_FONT = 'consola.ttf' # Change this
 TEXT_SIZE = TEXT_INFO[TEXT_FONT]['size']
 CURRENT_SL_DIR = SL_DIR + TEXT_INFO[TEXT_FONT]['dir']
 CURRENT_ML_DIR = ML_DIR + TEXT_INFO[TEXT_FONT]['dir']

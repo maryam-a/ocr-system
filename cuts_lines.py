@@ -16,7 +16,7 @@ TEXT_INFO = {
     'OCRAEXT.TTF': {'size': 16, 'dir': 'ocr-a/'}
 }
 
-TEXT_FONT = 'lucon.ttf' # Change this
+TEXT_FONT = 'consola.ttf' # Change this
 TEXT_SIZE = TEXT_INFO[TEXT_FONT]['size']
 CURRENT_ML_DIR = ML_DIR + TEXT_INFO[TEXT_FONT]['dir']
 TEST_DIR = 'test'
@@ -99,7 +99,6 @@ def slice_image(imagepath, data_type):
     for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving
         picture = cutimages[index]
         if data_type == 'm':
-            print(imagepath.split(CURRENT_ML_DIR))
             img_num = imagepath.split(CURRENT_ML_DIR)[1][:-4]
             picture.save(TEST_DIR + '/image' + str(img_num) + '-' + str(index) +'.png')
         elif data_type == 'd':
@@ -107,6 +106,7 @@ def slice_image(imagepath, data_type):
         else: 
             pass
 
+    # For debugging purposes, uncomment below
     # #display the image with green boxes around what we've cut
     # cv2.namedWindow('img', 0)
     # cv2.imshow('img', vis)
@@ -117,6 +117,5 @@ def slice_image(imagepath, data_type):
     #     continue
     # cv2.destroyAllWindows()
 
-###
 #code for getting only letters
 #https://stackoverflow.com/questions/44185854/extract-text-from-image-using-mser-in-opencv-python

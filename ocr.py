@@ -32,7 +32,7 @@ TEXT_INFO = {
     'OCRAEXT.TTF': {'size': 16, 'dir': 'ocr-a/', 'model': 'model-ocr-a'}
 }
 
-TEXT_FONT = 'lucon.ttf' # Change this
+TEXT_FONT = 'consola.ttf' # Change this
 TEXT_SIZE = TEXT_INFO[TEXT_FONT]['size']
 CURRENT_SL_DIR = SL_DIR + TEXT_INFO[TEXT_FONT]['dir']
 CURRENT_ML_DIR = ML_DIR + TEXT_INFO[TEXT_FONT]['dir']
@@ -156,9 +156,10 @@ def predict_multiline(a):
 
     for i in range(num_lines):
         img_path = 'test/image' + image_name[:-4] + '-' + str(i) + '.png'
-        image = imread(img_path)
-        prediction = predict_string_from_image(image)
-        print(prediction)
+        print(img_path)
+    #     image = imread(img_path)
+    #     prediction = predict_string_from_image(image)
+    #     print(prediction)
 
 def predict_demo(a):
     '''
@@ -184,44 +185,44 @@ architecture = [('C', [4, 4,  3, NUM_CHARS // 2], [1, 2, 2, 1]), ('AF', 'relu'),
                 ('R', [-1, 64, NUM_CHARS])]
 
 # Building the model
-cnnc = ANNC(IMAGE_SIZE, architecture, batchSize = 64, learnRate = 5e-5, maxIter = ITERS, reg = 1e-5, tol = 1e-2, verbose = True)
-if not cnnc.RestoreModel(CURRENT_MODEL_DIR + '/', NN_DIR):
-    images, gt_padding, gt, image_names = load_data()
+# cnnc = ANNC(IMAGE_SIZE, architecture, batchSize = 64, learnRate = 5e-5, maxIter = ITERS, reg = 1e-5, tol = 1e-2, verbose = True)
+# if not cnnc.RestoreModel(CURRENT_MODEL_DIR + '/', NN_DIR):
+#     images, gt_padding, gt, image_names = load_data()
 
-    # Shuffle and split data
-    shuffled_data = model_selection.ShuffleSplit(n_splits = 1, random_state = 123)
-    train, test = next(shuffled_data.split(images))
+#     # Shuffle and split data
+#     shuffled_data = model_selection.ShuffleSplit(n_splits = 1, random_state = 123)
+#     train, test = next(shuffled_data.split(images))
 
-    # Fit data to neural network
-    cnnc.fit(images[train], gt_padding[train])
+#     # Fit data to neural network
+#     cnnc.fit(images[train], gt_padding[train])
 
-    # Retrieve the predictions as a sequence of character indices
-    prediction_seq = []
-    for i in np.array_split(np.arange(images.shape[0]), 32): # 32 x 32
-        prediction_seq.append(cnnc.predict(images[i]))
-    prediction_seq = np.vstack(prediction_seq)
+#     # Retrieve the predictions as a sequence of character indices
+#     prediction_seq = []
+#     for i in np.array_split(np.arange(images.shape[0]), 32): # 32 x 32
+#         prediction_seq.append(cnnc.predict(images[i]))
+#     prediction_seq = np.vstack(prediction_seq)
 
-    # Convert the predictions from a sequence to strings
-    prediction_string = np.array([''.join(seq) for seq in prediction_seq])
+#     # Convert the predictions from a sequence to strings
+#     prediction_string = np.array([''.join(seq) for seq in prediction_seq])
 
-    # Compute accuracy
-    train_acc = accuracy(prediction_string[train], gt[train])
-    test_acc = accuracy(prediction_string[test], gt[test])
-    print('\nTrain accuracy: ' + str(train_acc))
-    print('Test accuracy: ' + str(test_acc))
+#     # Compute accuracy
+#     train_acc = accuracy(prediction_string[train], gt[train])
+#     test_acc = accuracy(prediction_string[test], gt[test])
+#     print('\nTrain accuracy: ' + str(train_acc))
+#     print('Test accuracy: ' + str(test_acc))
 
-    # Debug: Show the ground truth and the predicted text
-    # for guess, text, name in zip(prediction_string, gt, image_names):
-    #     print(name + ': ' + text + ' -> ' + guess)
+#     # Debug: Show the ground truth and the predicted text
+#     # for guess, text, name in zip(prediction_string, gt, image_names):
+#     #     print(name + ': ' + text + ' -> ' + guess)
 
-    # Save model for next time
-    cnnc.SaveModel(os.path.join(CURRENT_MODEL_DIR, NN_DIR))
-    with open(MODEL_CLASSES, 'w') as classes_file:
-        classes_file.write('\n'.join(cnnc._classes))
+#     # Save model for next time
+#     cnnc.SaveModel(os.path.join(CURRENT_MODEL_DIR, NN_DIR))
+#     with open(MODEL_CLASSES, 'w') as classes_file:
+#         classes_file.write('\n'.join(cnnc._classes))
 
-else:
-    with open(MODEL_CLASSES) as classes_file:
-        cnnc.RestoreClasses(classes_file.read().splitlines())
+# else:
+#     with open(MODEL_CLASSES) as classes_file:
+#         cnnc.RestoreClasses(classes_file.read().splitlines())
 
 
 if __name__ == "__main__":

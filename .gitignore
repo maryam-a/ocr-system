@@ -8,6 +8,7 @@ TFModel/
 .vscode/
 test/
 sample_screenshots/
+loss/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
