@@ -10,14 +10,29 @@ from pathlib import Path
 np.random.seed(123)
 
 # Constant Values
-FONT_BANK = {
-    'consola.ttf': 18,
-    'cour.ttf': 16,
-    'lucon.ttf': 17,
-    'OCRAEXT.TTF': 16
+DATA_ROOT = 'data/'
+# Single Line
+SL_DIR = DATA_ROOT + 'single_line'
+SL_DATA = DATA_ROOT + 'sl_data.txt'
+# Multiple Line
+ML_DIR = DATA_ROOT + 'multiple_lines'
+ML_DATA = DATA_ROOT + 'ml_data.txt'
+# Demo Data
+DEMO_DIR = DATA_ROOT + 'demo'
+
+TEXT_INFO = {
+    'consola.ttf': {'size': 18, 'dir': '/consola'},
+    'cour.ttf': {'size': 16, 'dir': '/cour'},
+    'lucon.ttf': {'size': 17, 'dir': '/lucon'},
+    'OCRAEXT.TTF': {'size': 16, 'dir': '/ocr-a'}
 }
-TEXT_FONT = 'cour.ttf'
-TEXT_SIZE = FONT_BANK[TEXT_FONT]
+
+TEXT_FONT = 'cour.ttf' # Change this
+TEXT_SIZE = TEXT_INFO[TEXT_FONT]['size']
+CURRENT_SL_DIR = SL_DIR + TEXT_INFO[TEXT_FONT]['dir']
+CURRENT_ML_DIR = ML_DIR + TEXT_INFO[TEXT_FONT]['dir']
+CURRENT_DEMO_DIR = DEMO_DIR + TEXT_INFO[TEXT_FONT]['dir']
+
 IMAGE_FONT = ImageFont.truetype(TEXT_FONT, TEXT_SIZE)
 IMAGE_MODE = 'RGB'
 BACKGROUND_COLOR = 'white'
@@ -27,18 +42,9 @@ MIN_CHAR = 10
 MAX_CHAR = 64
 N_IMAGES = 10000
 N_LINES = 10
-POSSIBLE_CHARS = list(string.ascii_letters) + list(string.digits) + [' '] # + list(string.punctuation)
-DATA_ROOT = 'data/'
-IMAGE_ENCODING = '.png'
+POSSIBLE_CHARS = list(string.ascii_letters) + list(string.digits) + [' ']
 
-# Single Line
-SL_DIR = DATA_ROOT + 'single_line'
-SL_DATA = DATA_ROOT + 'sl_data.txt'
-# Multiple Line
-ML_DIR = DATA_ROOT + 'multiple_lines'
-ML_DATA = DATA_ROOT + 'ml_data.txt'
-# Demo Data
-DEMO_DIR = 'data/demo'
+IMAGE_ENCODING = '.png'
 
 def create_text_image(text, filename, size, font=IMAGE_FONT, offset=TEXT_OFFSET,
                       background=BACKGROUND_COLOR, font_color=TEXT_COLOR):
@@ -70,6 +76,7 @@ def get_ideal_text_image_size(max_chars=MAX_CHAR, num_lines=1, font=IMAGE_FONT,
     # start with image block and expand with text
     base_image = Image.new(IMAGE_MODE, (1, 1), background)
     drawn_image = ImageDraw.Draw(base_image)
+
     if num_lines != 1:
         # re: text is double spaced
         return drawn_image.textsize('\n'.join(2 * num_lines * ['0' * max_chars]), font=font)
@@ -85,7 +92,7 @@ def create_dir_if_not_present(dir_name):
         Path(dir_name).mkdir()
 
 def create_single_line_text_images(min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_images=N_IMAGES,
-                                  save_dir=SL_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
+                                  save_dir=CURRENT_SL_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
                                   offset=TEXT_OFFSET, font_color=TEXT_COLOR):
     '''
     Create an image with a single line of random text (lowercase + uppercase ASCII letters,
@@ -107,14 +114,14 @@ def create_single_line_text_images(min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_i
         random_num = np.random.randint(min_chars, max_chars)
         random_string = ''.join(np.random.choice(POSSIBLE_CHARS, random_num))
         image_name = str(i) + IMAGE_ENCODING
-        create_text_image(random_string, SL_DIR + '/' + image_name, size, font, offset, background, font_color)
+        create_text_image(random_string, save_dir + '/' + image_name, size, font, offset, background, font_color)
         all_lines.append(image_name + ' ' + random_string) #note space: need to change that in deepocr
     
     with open(SL_DATA, 'w') as output_file:
         output_file.write('\n'.join(all_lines))
 
 def create_multiple_line_text_images(num_lines=N_LINES, min_chars=MIN_CHAR, max_chars=MAX_CHAR, num_images=N_IMAGES,
-                                    save_dir=ML_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
+                                    save_dir=CURRENT_ML_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
                                     offset=TEXT_OFFSET, font_color=TEXT_COLOR):
     '''
     Create an image with a single line of random text (lowercase + uppercase ASCII letters,
@@ -143,16 +150,16 @@ def create_multiple_line_text_images(num_lines=N_LINES, min_chars=MIN_CHAR, max_
         image_text = '\n\n'.join(temp)
         file_text = '\\n'.join(temp)
         image_name = str(i) + IMAGE_ENCODING
-        create_text_image(image_text, ML_DIR + '/' + image_name, size, font, offset, background, font_color)
+        create_text_image(image_text, save_dir + '/' + image_name, size, font, offset, background, font_color)
         all_lines.append(image_name + ' ' + file_text) #note space: need to change that in deepocr
     
     with open(ML_DATA, 'w') as output_file:
         output_file.write('\n'.join(all_lines))
 
 def create_demo_data(textfile, max_chars=MAX_CHAR,
-                    save_dir=DEMO_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
+                    save_dir=CURRENT_DEMO_DIR, font=IMAGE_FONT, background=BACKGROUND_COLOR,
                     offset=TEXT_OFFSET, font_color=TEXT_COLOR):
-    create_dir_if_not_present(DEMO_DIR)
+    create_dir_if_not_present(save_dir)
 
     all_lines = []
     with open(textfile) as demo_text:
@@ -163,11 +170,13 @@ def create_demo_data(textfile, max_chars=MAX_CHAR,
     size = get_ideal_text_image_size(max_chars, len(all_lines), font, background)
     
     image_text = '\n\n'.join(all_lines)
-    image_name = 'demo.png'
-    create_text_image(image_text, DEMO_DIR + '/' + image_name, size, font, offset, background, font_color)
+    image_name = 'demo' + IMAGE_ENCODING
+    create_text_image(image_text, save_dir + '/' + image_name, size, font, offset, background, font_color)
 
 if __name__ == "__main__":
-    # create_dir_if_not_present(DATA_ROOT)
-    # create_single_line_text_images()
-    # create_multiple_line_text_images(num_images=100)
-    create_demo_data('data/demo.txt')
+    create_dir_if_not_present(DATA_ROOT)
+    create_dir_if_not_present(SL_DIR)
+    create_dir_if_not_present(ML_DIR)
+    create_single_line_text_images()
+    create_multiple_line_text_images(num_images=100)
+    # create_demo_data(DATA_ROOT + 'demo.txt')
