@@ -8,6 +8,18 @@ np.random.seed(123)
 DATA_ROOT = 'data/'
 ML_DIR = DATA_ROOT + 'multiple_lines/'
 
+TEXT_INFO = {
+    'consola.ttf': {'size': 18, 'dir': 'consola/'},
+    'cour.ttf': {'size': 16, 'dir': 'cour/'},
+    'lucon.ttf': {'size': 17, 'dir': 'lucon/'},
+    'OCRAEXT.TTF': {'size': 16, 'dir': 'ocr-a/'}
+}
+
+TEXT_FONT = 'cour.ttf' # Change this
+TEXT_SIZE = TEXT_INFO[TEXT_FONT]['size']
+CURRENT_ML_DIR = ML_DIR + TEXT_INFO[TEXT_FONT]['dir']
+TEST_DIR = 'test'
+
 #checks whether two images overlap. If they do, return a larger bounding box.
 def overlaps(prev, curr):
     
@@ -35,8 +47,9 @@ def create_dir_if_not_present(dir_name):
     if not Path(dir_name).is_dir():
         Path(dir_name).mkdir()
 
-def slice_image(imagepath):
-    create_dir_if_not_present('test')
+def slice_image(imagepath, data_type):
+    # data_type: 'm' if multiple lines, 'd' if demo
+    create_dir_if_not_present(TEST_DIR)
     #img is image for opencv; img_cutversion is for Pillow to cut
     img = cv2.imread(imagepath)
     img_cutversion=Image.open(imagepath)
@@ -84,9 +97,14 @@ def slice_image(imagepath):
     #save each of the images in cutimages
     for index in range(min(100,len(summarized_rects))): #set the min to 100 for now to avoid oversaving
         picture = cutimages[index]
-        # img_num = imagepath.split(ML_DIR)[1][:-4] #imagepath[4:-4]
-        # picture.save('test/image' + str(img_num) + '-' + str(index) +'.png')
-        picture.save('test/demo' + '-' + str(index) +'.png')
+        if data_type == 'm':
+            print(imagepath.split(CURRENT_ML_DIR))
+            img_num = imagepath.split(CURRENT_ML_DIR)[1][:-4]
+            picture.save(TEST_DIR + '/image' + str(img_num) + '-' + str(index) +'.png')
+        elif data_type == 'd':
+            picture.save(TEST_DIR + '/demo' + '-' + str(index) +'.png')
+        else: 
+            pass
 
     # #display the image with green boxes around what we've cut
     # cv2.namedWindow('img', 0)
