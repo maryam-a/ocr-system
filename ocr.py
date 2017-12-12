@@ -43,7 +43,7 @@ MODEL_CLASSES = CURRENT_MODEL_DIR + '/_classes.txt'
 
 ITERS = 500
 
-def load_data(train_dir=SL_DIR, train_file=SL_FILE):
+def load_data(train_dir=CURRENT_SL_DIR, train_file=SL_FILE):
     '''
     Loads and prepares the dataset for training and testing.
     train_dir: string, The path to directory with the training images
